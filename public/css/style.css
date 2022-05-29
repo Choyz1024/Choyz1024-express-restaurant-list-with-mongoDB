@@ -78,6 +78,14 @@ header {
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.sort-bar-container {
+  width: 100%;
+}
+
+.sort-bar {
+  width: 9%;
+}
+
 @media screen and (max-width: 992px) {
   
   .card img{
