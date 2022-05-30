@@ -27,7 +27,11 @@
 
 <div class='sort-bar-container d-inline-flex justify-content-end'>
   <div class='sort-bar mr-5'>
+    {{#if input}}
+    <form action='/search' method='POST'>
+    {{else}}
     <form action='/' method='POST'>
+    {{/if}}
       <div class='input-group'>
         <select class='form-control' id='sort' name='sort' onchange='form.submit()'>
           <option hidden>{{ sortKey }}</option>
@@ -37,6 +41,7 @@
           <option value="location">地區</option>
           <option value="-rating">Rating</option>
         </select>
+        <input hidden type="text" class="form-control" id='keywords' name='keywords' value="{{input}}">
       </div>
     </form>
   </div>

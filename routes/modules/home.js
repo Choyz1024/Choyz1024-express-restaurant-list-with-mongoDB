@@ -46,4 +46,24 @@ router.get('/search', (req, res) => {
     .catch((err) => console.log(err))
 })
 
+router.post('/search', (req, res) => {
+  const input = req.body.keywords
+  const keyword = input.trim().toLowerCase()
+  const sort = req.body.sort || 'name'
+  const sortKey = {
+    name: 'A > Z',
+    '-name': 'Z > A',
+    category: '類型',
+    location: '地區',
+    '-rating': 'Rating',
+  }
+  Restaurant.find({
+    $or: [{ name: { $regex: keyword, $options: '$i' } }, { category: { $regex: keyword, $options: '$i' } }],
+  })
+    .lean()
+    .sort(sort)
+    .then((restaurantsData) => res.render('index', { restaurantsData, sortKey: sortKey[sort], input }))
+    .catch((err) => console.log(err))
+})
+
 module.exports = router
