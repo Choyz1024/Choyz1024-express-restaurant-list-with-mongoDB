@@ -5,22 +5,24 @@ const Restaurant = require('../../models/Restaurant')
 router.get('/', (req, res) => {
   Restaurant.find({})
     .lean()
-    .then((restaurantsData) => res.render('index', { restaurantsData }))
+    .sort('name')
+    .then((restaurantsData) => res.render('index', { restaurantsData, sortKey: 'A > Z' }))
     .catch((err) => console.log(err))
 })
 
 router.post('/', (req, res) => {
-  const sort = req.body.sort  || 'name'
+  const sort = req.body.sort || 'name'
   const sortKey = {
-    'name': 'A->Z',
-    '-name': 'Z->A',
-    'category': '類型',
-    'rating': 'Rating',
+    name: 'A > Z',
+    '-name': 'Z > A',
+    category: '類型',
+    location: '地區',
+    '-rating': 'Rating',
   }
   Restaurant.find({})
     .lean()
     .sort(sort)
-    .then((restaurantsData) => res.render('index', { restaurantsData, sortKey : sortKey[sort] }))
+    .then((restaurantsData) => res.render('index', { restaurantsData, sortKey: sortKey[sort] }))
     .catch((err) => console.log(err))
 })
 
@@ -33,13 +35,13 @@ router.get('/search', (req, res) => {
   const input = req.query.keywords
   const keyword = input.trim().toLowerCase()
 
-  Restaurant.find({})
+  Restaurant.find({
+    $or: [{ name: { $regex: keyword, $options: '$i' } }, { category: { $regex: keyword, $options: '$i' } }],
+  })
     .lean()
+    .sort('name')
     .then((restaurantsData) => {
-      const filterRestaurantsData = restaurantsData.filter(
-        (data) => data.name.toLowerCase().includes(keyword) || data.category.includes(keyword)
-      )
-      res.render('index', { restaurantsData: filterRestaurantsData, input })
+      res.render('index', { restaurantsData, sortKey: 'A > Z', input })
     })
     .catch((err) => console.log(err))
 })

@@ -13,7 +13,7 @@
               placeholder='輸入餐廳、分類'
               aria-label='Restaurant Name...'
               aria-describedby='search-button'
-              value='{{keywords}}'
+              value='{{input}}'
             />
             <div class='input-group-append'>
               <button class='btn btn-major' type='submit' id='search-button'><i class='fas fa-search'></i></button>
@@ -34,6 +34,7 @@
           <option value="name">A > Z</option>
           <option value="-name">Z > A</option>
           <option value="category">類別</option>
+          <option value="location">地區</option>
           <option value="-rating">Rating</option>
         </select>
       </div>
